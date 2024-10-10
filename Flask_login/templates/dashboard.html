@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Definición de colores */
+        body {
+            background-image: url('https://cdn.bolivia.com/sdi/2021/12/07/artesanos-promocionaran-produccion-feria-hecho-en-bolivia-la-paz-978700.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Georgia', serif;
+        }
+
+        .left-section {
+            background: linear-gradient(135deg, #1E3D34, #1e3d34b8);
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .right-section {
+            background-color: rgba(30, 61, 52, 0.72);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* Estilo del logo */
+        .logo {
+            text-align: center;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        /* Estilos para el título y subtítulo */
+        h1 {
+            color: #ffffff;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        p {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Estilos de los botones */
+        .btn-custom {
+            background-color: #1E3D34;
+            border: 2px solid #ffffff; /* Borde blanco para mayor contraste */
+            border-radius: 30px;
+            color: #ffffff;
+            padding: 12px 30px;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Añade una sombra */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+        }
+
+        .btn-custom:hover {
+            background-color: #2A5D4A; /* Color ligeramente más claro al hacer hover */
+            color: #ffffff;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumenta la sombra en hover */
+        }
+
+        /* Botón de Administrar Usuarios (en caso de admin) */
+        .btn-primary {
+            background-color: #0056b3; /* Asegura buen contraste */
+            border-color: #004085;
+            color: #ffffff;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 30px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Añade una sombra */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #004085; /* Cambia el color en hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumenta la sombra en hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex" style="height: 100vh;">
+        <div class="left-section">
+            <div class="logo">
+                <img src="/static/CSS/imagenes/Logo.png" alt="Producto">
+                <h2>ANDES ARTBOL</h2>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <h1>Bienvenido, {{ nombre|escape }}</h1>
+            <p>Este es tu dashboard. Aquí puedes acceder a tus opciones y funciones personalizadas.</p>
+
+            <a href="/perfil" class="btn btn-custom">Ver Perfil</a>
+            <a href="/productos" class="btn btn-custom">Ver Productos</a>
+            <a href="/pedidos" class="btn btn-custom">Ver Pedidos</a>
+            {% if is_admin %}
+            <a href="{{ url_for('admin') }}" class="btn btn-primary">Administrar Usuarios</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-custom">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (Popper.js and jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome for social media icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+
+</html>

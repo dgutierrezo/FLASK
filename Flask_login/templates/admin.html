@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Administradores - AndesArtBol</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #899B9F;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        table {
+            background-color: #1E3D34;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table thead th {
+            background-color: #3C5A57;
+            color: white;
+        }
+
+        table tbody td {
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-primary {
+            background-color: #1E3D34;
+            border-color: #1E3D34;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #28524E;
+        }
+
+        /* Estilo para el botón de volver atrás */
+        .btn-back {
+            background-color: #ff4b5c;
+            border-color: #ff4b5c;
+            margin-bottom: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #ff2a3b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Botón para volver atrás -->
+        <a href="javascript:history.back()" class="btn btn-back mb-4">← Volver</a>
+        
+        <h1>Administrar Administradores</h1>
+        
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario[0] }}</td>
+                        <td>{{ usuario[1] }}</td>
+                        <td>{{ usuario[2] }}</td>
+                        <td>
+                            <form action="{{ url_for('aceptar_admin', usuario_id=usuario[0]) }}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-success">Aceptar</button>
+                            </form>
+                            <form action="{{ url_for('cancelar_admin', usuario_id=usuario[0]) }}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger">Cancelar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

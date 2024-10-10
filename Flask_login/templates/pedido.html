@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen del Pedido</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #order-summary {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #order-items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #order-items li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #order-items li:last-child {
+            border-bottom: none;
+        }
+
+        #order-total {
+            font-size: 1.2em;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resumen del Pedido</h1>
+    <div id="order-summary">
+        <ul id="order-items">
+            <!-- Los items del pedido se mostrarán aquí -->
+        </ul>
+        <p>Total: Bs. <span id="order-total">0</span></p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const storedCart = localStorage.getItem('cart');
+            const cart = storedCart ? JSON.parse(storedCart) : [];
+            const orderItems = document.getElementById('order-items');
+            const orderTotal = document.getElementById('order-total');
+            let total = 0;
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} x${item.quantity} - Bs. ${(item.price * item.quantity).toFixed(2)}`;
+                orderItems.appendChild(li);
+
+                total += item.price * item.quantity;
+            });
+
+            orderTotal.textContent = total.toFixed(2);
+        };
+    </script>
+</body>
+</html>

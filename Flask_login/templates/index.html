@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <style>
+        /* Estilos CSS */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1e836d;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .products {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: rgb(121, 233, 214);
+            width: 200px;
+            text-align: center;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(253, 253, 253, 0.1);
+        }
+
+        .product h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .product button{
+            background-color: #14917c;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #094eb4;
+        }
+
+        
+        .back-button {
+            display: block;
+            width: 200px;
+            padding: 8px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /*margin: 10px auto;*/
+
+            /*background-color: #01b9d1;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;*/
+        
+        }
+
+       
+        .back-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        .back-button:hover {
+            background-color: #c82333;
+        }
+
+
+        #cart {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgb(214, 222, 252);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #cart-items {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        #cart-items li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cart-items li:last-child {
+            border-bottom: none;
+        }
+
+        #cart-items button {
+            background-color: #d33af1;
+            color: rgb(241, 255, 251);
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        #cart-items button:hover {
+            background-color: #3a2df0;
+        }
+
+        #cart-total {
+            font-size: 1.2em;
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .products {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .product {
+                width: 80%;
+            }
+
+            #cart {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1> CARRITO DE COMPRAS , {{ nombre|escape }}</h1> 
+    <p>Bienvenido, puedes observar los productos que ofrecemos</p>
+    
+    <div class="products">
+        <div class="product">
+            <img src="img/img_uno.jpg" alt="Producto 1">
+            <h2>Telares artesanales</h2>
+            <p>Precio: 35.5 Bs</p>
+            <button onclick="addToCart('Telares artesanales',35.5 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_dos.jpg" alt="Producto 2">
+            <h2>Vinchas de aguayo</h2>
+            <p>Precio: 25 Bs</p>
+            <button onclick="addToCart('Vinchas de aguayo', 25)">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_tres.jpg" alt="Producto 3">
+            <h2>Bolson de Aguayo</h2>
+            <p>Precio: 30.5 Bs</p>
+            <button onclick="addToCart('Bolson de Aguayo', 30.5)">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_cuatro.jpg" alt="Producto 4">
+            <h2>Cuadro Bordado con Lana</h2>
+            <p>Precio: 70 Bs</p>
+            <button onclick="addToCart('Cuadro Bordado con Lana',70 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_cinco.jpg" alt="Producto 5">
+            <h2>Mochila de textil de Aguayo</h2>
+            <p>Precio: 250 Bs</p>
+            <button onclick="addToCart('Mochila de textil de Aguayo',250 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/imgseis.jpg" alt="Producto 6">
+            <h2>Monedero de Aguayo</h2>
+            <p>Precio: 40 Bs</p>
+            <button onclick="addToCart('Monedero de Aguayo',40 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_siete.jpg" alt="Producto 7">
+            <h2>Charango de Madera con Diseño</h2>
+            <p>Precio: 350 Bs</p>
+            <button onclick="addToCart('Charango de Madera con Diseño',350 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_ocho.jpg" alt="Producto 8">
+            <h2>Collares de Textil</h2>
+            <p>Precio: 45 Bs</p>
+            <button onclick="addToCart('Collares de Textil',45 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_nueve.jpg" alt="Producto 9">
+            <h2>Aguayos de Colores y formas distintas</h2>
+            <p>Precio: 320 Bs</p>
+            <button onclick="addToCart('Aguayos de Colores y formas distintas',320 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_diez.jpg" alt="Producto 10">
+            <h2>Figuras de Ceramica</h2>
+            <p>Precio: 60 Bs</p>
+            <button onclick="addToCart('Figuras de Ceramica',60 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_once.jpg" alt="Producto 11">
+            <h2>Alcuza andina de Ceramica</h2>
+            <p>Precio: 50 Bs</p>
+            <button onclick="addToCart('Alcuza andina de Ceramica',50 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_doce.jpg" alt="Producto 12">
+            <h2>Tejidos de los Pueblos</h2>
+            <p>Precio: 175.20 Bs</p>
+            <button onclick="addToCart('Tejidos de los Pueblos',175.20 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_trece.jpg" alt="Producto 13">
+            <h2>Telares de Alpaca</h2>
+            <p>Precio: 820 Bs</p>
+            <button onclick="addToCart('Telares de Alpaca',820 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_catorce.jpg" alt="Producto 14">
+            <h2>Ropa con adornos de Aguayo</h2>
+            <p>Precio: 167 Bs</p>
+            <button onclick="addToCart('Ropa con adornos de Aguayo',167 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_quince.jpg" alt="Producto 15">
+            <h2>Juego de Jarron Ceramica</h2>
+            <p>Precio: 90 Bs</p>
+            <button onclick="addToCart('Juego de Jarron Ceramica',90 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_16.jpeg" alt="Producto 16">
+            <h2>Artesania fria</h2>
+            <p>Precio: 198 Bs</p>
+            <button onclick="addToCart('Artesania fria',198 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_17.jfif" alt="Producto 17">
+            <h2>Juego de Ollas de Barro</h2>
+            <p>Precio: 370 Bs</p>
+            <button onclick="addToCart('Juego de Ollas de Barro',370 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_18.jpg" alt="Producto 18">
+            <h2>Cesteria tejido de Antaño</h2>
+            <p>Precio: 50 Bs</p>
+            <button onclick="addToCart('Cesteria tejido de Antaño',50 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_19.jpg" alt="Producto 19">
+            <h2>Mantas ATTELIER de Alpaca</h2>
+            <p>Precio: 1500 Bs</p>
+            <button onclick="addToCart('Mantas ATTELIER de Alpaca',1500 )">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="img/img_20.jpg" alt="Producto 20">
+            <h2>Balsa de Totora Con cholitas</h2>
+            <p>Precio: 100 Bs</p>
+            <button onclick="addToCart('Balsa de Totora Con cholitas',100 )">Añadir al carrito</button>
+        </div>
+    </div>
+
+    <div id="cart">
+        <h2>Carrito</h2>
+        <ul id="cart-items">
+            <!-- Los items del carrito se añadirán aquí -->
+        </ul>
+        <p>Total: Bs. <span id="cart-total">0</span></p>
+          
+      <!-- Botón de Pago -->
+    <button 
+        id="checkout-button" onclick="checkout()" style="background-color: #28a745; 
+        color: white; padding: 10px 20px; 
+        border: none; border-radius: 5px; cursor: pointer;">Proceder al Pago
+        
+    </button>
+
+      <!-- Botón de Volver -->
+      <a class="back-button" href="#" onclick="goBack()">Volver</a>
+      
+
+
+    <script>
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Tu carrito está vacío. Añade productos antes de proceder al pago.");
+            } else {
+                window.location.href = 'pago.html'; // Redirige a la página de pago
+            }
+        }
+    </script>
+
+
+    </div>
+    
+
+    <script>
+        // Lógica JavaScript
+
+        let cart = [];
+
+        function addToCart(name, price) {
+            const existingProduct = cart.find(item => item.name === name);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function removeFromCart(name) {
+            const productIndex = cart.findIndex(item => item.name === name);
+            if (productIndex > -1) {
+                if (cart[productIndex].quantity > 1) {
+                    cart[productIndex].quantity -= 1;
+                } else {
+                    cart.splice(productIndex, 1);
+                }
+            }
+            updateCart();
+        }
+       
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                const itemInfo = document.createElement('span');
+                itemInfo.textContent = `${item.name} x${item.quantity} - Bs. ${item.price * item.quantity}`;
+                
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Eliminar';
+                removeButton.onclick = () => removeFromCart(item.name);
+                
+                li.appendChild(itemInfo);
+                li.appendChild(removeButton);
+                cartItems.appendChild(li);
+
+                total += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = total.toFixed(2);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        window.onload = function() {
+            const storedCart = localStorage.getItem('cart');
+            if (storedCart) {
+                cart = JSON.parse(storedCart);
+                updateCart();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura - Pago</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e8f5e9;
+        }
+
+        .invoice {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #004d40;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #ffffff;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #b2dfdb;
+        }
+
+        .invoice-details, .invoice-items {
+            margin-bottom: 20px;
+        }
+
+        .invoice-items table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .invoice-items table, th, td {
+            border: 1px solid #80cbc4;
+            padding: 10px;
+            text-align: center;
+            background-color: #004d40;
+        }
+
+        .invoice-items th {
+            background-color: #00796b;
+            color: #ffffff;
+        }
+
+        .invoice-items td {
+            background-color: #004d40;
+            color: #ffffff;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #b2dfdb;
+        }
+
+        .pay-button, .back-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 20px auto;
+        }
+
+        .pay-button {
+            background-color: #00bfa5;
+            color: #ffffff;
+        }
+
+        .pay-button:hover {
+            background-color: #00796b;
+        }
+
+        .back-button {
+            background-color: #c62828;
+            color: #ffffff;
+        }
+
+        .back-button:hover {
+            background-color: #b71c1c;
+        }
+
+        .payment-options {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .payment-option {
+            margin: 10px 0;
+        }
+
+        .payment-option label {
+            font-weight: bold;
+            color: #b2dfdb;
+        }
+
+        #qr-image {
+            display: none;
+            margin-top: 15px;
+            width: 150px;
+            height: 150px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bank-details {
+            display: none;
+            margin-top: 15px;
+            text-align: left;
+            color: #ffffff;
+        }
+
+        .bank-details p {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="invoice">
+        <img src="/static/CSS/imagenes/Logo.png" alt="Logo de la página" class="logo">
+        <h1>Factura de Pago</h1>
+        <h2>Detalles del Pedido</h2>
+        <div class="invoice-details">
+            <p><strong>Fecha:</strong> <span id="date"></span></p>
+            <p><strong>Nombre del Cliente:</strong> {{ nombre|escape }}</p>
+        </div>
+
+        <div class="invoice-items">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario (Bs)</th>
+                        <th>Total (Bs)</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-items-body">
+                    <!-- Los ítems de la factura se agregarán aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <p class="total">Total a Pagar: Bs. <span id="invoice-total">0</span></p>
+
+        <!-- Opciones de pago -->
+        <div class="payment-options">
+            <h2>Selecciona el método de pago</h2>
+            <div class="payment-option">
+                <input type="radio" id="deposito" name="payment-method" value="deposito" onclick="showPaymentOption('deposito')">
+                <label for="deposito">Depósito Bancario</label>
+            </div>
+            <div class="payment-option">
+                <input type="radio" id="qr" name="payment-method" value="qr" onclick="showPaymentOption('qr')">
+                <label for="qr">Pago con QR</label>
+            </div>
+
+            <div class="bank-details" id="bank-details">
+                <p><strong>Banco:</strong> BANCO UNION</p>
+                <p><strong>Número de Cuenta:</strong> 1000002548889</p>
+                <p><strong>Nombre del Titular:</strong> AndesArtBol</p>
+                <p><strong>Instrucciones:</strong> Realiza el depósito y envía el comprobante a soporte@andesartbol.com</p>
+            </div>
+
+            <img id="qr-image" src="/static/CSS/imagenes/qr.jpeg" alt="QR Code para Pago">
+        </div>
+
+        <a class="pay-button" href="#" onclick="finalizePayment()">Finalizar Pago</a>
+        <a class="back-button" href="#" onclick="goBack()">← Volver</a>
+    </div>
+
+    <script>
+        function loadInvoice() {
+            const invoiceItemsBody = document.getElementById('invoice-items-body');
+            const invoiceTotal = document.getElementById('invoice-total');
+            let total = 0;
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (cart.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="4">No hay productos en el carrito.</td>';
+                invoiceItemsBody.appendChild(tr);
+            } else {
+                cart.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const totalItem = (item.price * item.quantity).toFixed(2);
+                    tr.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>Bs. ${item.price.toFixed(2)}</td>
+                        <td>Bs. ${totalItem}</td>
+                    `;
+                    invoiceItemsBody.appendChild(tr);
+                    total += parseFloat(totalItem);
+                });
+                invoiceTotal.textContent = total.toFixed(2);
+            }
+        }
+
+        function showPaymentOption(option) {
+            const bankDetails = document.getElementById('bank-details');
+            const qrImage = document.getElementById('qr-image');
+            if (option === 'deposito') {
+                bankDetails.style.display = 'block';
+                qrImage.style.display = 'none';
+            } else if (option === 'qr') {
+                bankDetails.style.display = 'none';
+                qrImage.style.display = 'block';
+            }
+        }
+
+        function finalizePayment() {
+            alert('Pago finalizado con éxito.');
+            localStorage.removeItem('cart');  // Limpia el carrito
+            window.location.href = '/dashboard';  // Redirigir a la página principal
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.getElementById('date').textContent = new Date().toLocaleDateString();
+        window.onload = loadInvoice;
+    </script>
+
+</body>
+</html>

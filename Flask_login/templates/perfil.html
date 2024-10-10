@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .navbar {
+            background-color: #1E3D34;
+            padding: 15px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+
+        }
+
+        .navbar h1 {
+            color: white;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .promo-bar {
+            background-color: #e74c3c;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .login-form {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header h3 {
+            color: #2c3e50;
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .card-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .footer {
+            background-color: #1E3D34;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .footer a {
+            color: white;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>ANDES ARTBOL</h1>
+    </div>
+    <div class="container login-container">
+        <div class="login-form">
+            <div class="card-header">
+                <h3>Perfil de Usuario</h3>
+                <p>Actualiza tu información personal</p>
+            </div>
+            <form method="POST" action="{{ url_for('perfil') }}">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ usuario[0] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" class="form-control" id="correo" name="correo" value="{{ usuario[1] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" class="form-control" id="telefono" name="telefono" value="{{ usuario[2] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="rol_id">Rol:</label>
+                    <select class="form-control" name="rol_id" required>
+                        <option value="" disabled selected>Seleccione un rol</option>
+                        {% for rol in roles %}
+                            <option value="{{ rol[0] }}" {% if usuario[3] == rol[0] %} selected {% endif %}>{{ rol[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comunidad_id">Comunidad:</label>
+                    <select class="form-control" name="comunidad_id" required>
+                        <option value="" disabled selected>Seleccione una comunidad</option>
+                        {% for comunidad in comunidades %}
+                            <option value="{{ comunidad[0] }}" {% if usuario[4] == comunidad[0] %} selected {% endif %}>{{ comunidad[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+            </form>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="{{ url_for('dashboard') }}">Volver al Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>AndesArtBol &copy; 2024</p>
+        <a href="{{url_for('politicas')}}">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a>
+    </div>
+</body>
+</html>

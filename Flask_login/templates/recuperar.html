@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #899B9F; /* Un tono más claro y limpio */
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            background-color: #ffffff; /* Fondo blanco para claridad */
+            border-radius: 15px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        }
+        .card-header {
+            background-color: #1E3D34;
+            color: white;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            text-align: center;
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #1E3D34;
+            border-color: #1E3D34;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .btn-primary:hover {
+            background-color: #2B4B43;
+            border-color: #2B4B43;
+        }
+        .form-control {
+            border-color: #1E3D34;
+            padding: 12px;
+        }
+        .form-group label {
+            color: #1E3D34;
+            font-weight: bold;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .text-muted {
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recuperar Contraseña</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/recuperar">
+                            <div class="form-group">
+                                <label for="correo">Correo electrónico</label>
+                                <input type="email" class="form-control" id="correo" name="correo" placeholder="Introduce tu correo" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Enviar Código</button>
+                        </form>
+                    </div>
+                    <div class="text-muted">Recibirás un correo con un código para restablecer tu contraseña.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (Popper.js and jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

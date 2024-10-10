@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+
+</head>
+
+<style>
+    /* Estilos Generales */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0e6d6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        /* Mejora la legibilidad del texto */
+    }
+
+    header {
+        background-color: #1E3D34;
+        color: #ffffff;
+        text-align: center;
+        padding: 20px;
+        border-bottom: 5px solid #1E3D34;
+        /* Agrega un borde inferior para más definición */
+    }
+
+    header h1 {
+        font-family: 'Georgia', serif;
+        font-size: 2.8em;
+        /* Tamaño de fuente ajustado */
+        margin: 0;
+    }
+
+    header p {
+        font-size: 1.2em;
+        margin: 5px 0 0 0;
+    }
+
+    /* Estilo para los formularios */
+    .add-product-container {
+        background-color: #ffffff;
+        padding: 25px;
+        /* Espaciado aumentado */
+        margin: 20px auto;
+        max-width: 700px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        /* Sombra más suave */
+    }
+
+    .add-product-container h2 {
+        color: #6b4226;
+        font-size: 2em;
+        /* Tamaño de fuente ajustado */
+        margin-bottom: 20px;
+        /* Espacio aumentado */
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        /* Espaciado ajustado */
+        color: #333;
+        font-weight: bold;
+        /* Texto en negrita */
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        /* Aumento en el padding */
+        margin-bottom: 20px;
+        /* Espacio aumentado */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+    .btn {
+        background-color: #ca3e47;
+        color: #fff;
+        padding: 12px 25px;
+        /* Aumento en el padding */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        /* Ajuste en el tamaño de la fuente */
+        transition: background-color 0.3s;
+        /* Suaviza el cambio de color */
+    }
+
+    .btn:hover {
+        background-color: #a32d36;
+    }
+
+    /* Estilo para los productos */
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        /* Ajuste de columnas */
+        gap: 20px;
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .product {
+        background-color: #fff;
+        padding: 20px;
+        /* Aumento en el padding */
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        /* Añadir efecto de sombra al pasar el ratón */
+    }
+
+    .product:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        /* Sombra al pasar el ratón */
+    }
+
+    .product img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .product h2 {
+        color: #6b4226;
+        font-size: 1.6em;
+        /* Tamaño de fuente ajustado */
+        margin-bottom: 10px;
+    }
+
+    .product p {
+        font-size: 1.2em;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .product button {
+        background-color: #ca3e47;
+        color: #fff;
+        padding: 12px 25px;
+        /* Aumento en el padding */
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        /* Suaviza el cambio de color */
+    }
+
+    .product button:hover {
+        background-color: #a32d36;
+    }
+
+    /* Estilo para el botón de eliminar */
+    .btn-danger {
+        background-color: #d9534f;
+        /* Color de fondo para el botón de eliminar */
+        margin-top: 10px;
+        /* Margen para separar el botón de eliminar */
+    }
+
+    .btn-danger:hover {
+        background-color: #c9302c;
+        /* Color de fondo al pasar el mouse */
+    }
+
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        /* Ajuste en el margen */
+        padding: 20px;
+        border: 1px solid #888;
+        border-radius: 10px;
+        width: 90%;
+        /* Ajuste en el ancho */
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        /* Sombra para el modal */
+    }
+
+    .close {
+        color: #ca3e47;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: #a32d36;
+    }
+
+    #modalImage {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    /* Carrito */
+    #cart {
+        background-color: #fff;
+        padding: 25px;
+        /* Aumento en el padding */
+        margin: 20px auto;
+        max-width: 700px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #cart h2 {
+        color: #6b4226;
+        font-size: 2em;
+        /* Tamaño de fuente ajustado */
+    }
+
+    #cart-items {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #cart-items li {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .checkout-button,
+    .back-button {
+        background-color: #ca3e47;
+        color: #fff;
+        padding: 12px 25px;
+        /* Aumento en el padding */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+        /* Suaviza el cambio de color */
+    }
+
+    .checkout-button:hover,
+    .back-button:hover {
+        background-color: #a32d36;
+    }
+
+    /* Barra de categorías */
+    .categories-sidebar {
+        width: 220px;
+        /* Aumento del ancho */
+        float: left;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-right: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* Sombra para la barra */
+    }
+
+    .categories-sidebar h3 {
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        color: #333;
+    }
+
+    .categories-sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .categories-sidebar ul li {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+        padding: 5px;
+        /* Espacio interior en los elementos de la lista */
+        border-radius: 5px;
+        /* Bordes redondeados para los elementos de la lista */
+        transition: background-color 0.3s;
+        /* Suaviza el cambio de color */
+    }
+
+    .categories-sidebar ul li:hover {
+        cursor: pointer;
+        background-color: #e2e2e2;
+        /* Color de fondo al pasar el ratón */
+    }
+
+    .categories-sidebar ul li.active {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .categories-sidebar ul li:hover.active {
+        text-decoration: none;
+    }
+
+    .clear {
+        clear: both;
+    }
+</style>
+
+
+<body>
+
+    <header>
+        <h1>Carrito de Compras, {{ nombre|escape }}</h1>
+        <p>Bienvenido, puedes observar nuestros productos que ofrecemos</p>
+    </header>
+
+    {% if usuario_rol == 'Administrador' %}
+    <div class="add-product-container">
+        <h2>Agregar nuevo producto</h2>
+        <form action="{{ url_for('agregar_producto') }}" method="POST" class="add-product-form"
+            enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="nombre">Nombre del producto:</label>
+                <input type="text" name="nombre" id="nombre" required class="form-control" placeholder="Ej. Jarrita ">
+            </div>
+
+            <div class="form-group">
+                <label for="precio">Precio del producto (Bs):</label>
+                <input type="number" step="0.01" name="precio" id="precio" required class="form-control"
+                    placeholder="Ej. 500.00">
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea name="descripcion" id="descripcion" required class="form-control"
+                    placeholder="Descripción del producto..." rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imagen_url">URL de la imagen (enlace):</label>
+                <input type="url" name="imagen_url" id="imagen_url" required class="form-control"
+                    placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="form-group">
+                <label for="imagen1">Subir imagen 1 (Tamaño en píxeles: 300x300):</label>
+                <input type="file" name="imagen1" id="imagen1" accept="image/*" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="imagen2">Subir imagen 2 (Tamaño en píxeles: 300x300):</label>
+                <input type="file" name="imagen2" id="imagen2" accept="image/*" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría del producto:</label>
+                <select name="categoria" id="categoria" class="form-control">
+                    <option value="artesania">Artesanía</option>
+                    <option value="decoracion">Decoración</option>
+                    <option value="textil">Textil</option>
+                    <option value="otros">Otros</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Agregar Producto</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="categories-sidebar">
+        <h3>Categorías</h3>
+        <ul>
+            <li onclick="filterByCategory('artesania')">Artesanía</li>
+            <li onclick="filterByCategory('decoracion')">Decoración</li>
+            <li onclick="filterByCategory('textil')">Textil</li>
+            <li onclick="filterByCategory('otros')">Otros</li>
+            <li onclick="filterByCategory('')">Todas</li>
+        </ul>
+    </div>
+
+    <div class="products">
+        <div class="product" data-categoria="textil"
+            onclick="showProductDetails('Telares artesanales', 35.5, '/static/CSS/imagenes/img_uno.jpg', 'Cada telar cuenta con una historia y refleja el esfuerzo y la dedicación de sus creadores, ideal para quienes aprecian la artesanía auténtica.', 4.5, ['/static/CSS/imagenes/img_uno.jpg'])">
+            <img src="/static/CSS/imagenes/img_uno.jpg" alt="Telares artesanales">
+            <h2>Telares artesanales</h2>
+            <p>Precio: 35.5 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Telares artesanales', 35.5)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="decoracion"
+            onclick="showProductDetails('Cuadro Bordado con Lana', 70, '/static/CSS/imagenes/img_cuatro.jpg', 'Diseñadas para ser funcionales y duraderas, estas mochilas combinan el arte textil con la practicidad, ideales para el uso diario.', 5, ['/static/CSS/imagenes/img_cuatro.jpg'])">
+            <img src="/static/CSS/imagenes/img_cuatro.jpg" alt="Cuadro Bordado con Lana">
+            <h2>Cuadro Bordado con Lana</h2>
+            <p>Precio: 70 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Cuadro Bordado con Lana', 70)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="otros"
+            onclick="showProductDetails('Mochila de textil de Aguayo', 250, '/static/CSS/imagenes/img_cinco.jpg', 'Prácticos y coloridos, estos monederos son confeccionados con aguayo, aportando un toque cultural a un accesorio cotidiano.', 4.8, ['/static/CSS/imagenes/img_cinco.jpg'])">
+            <img src="/static/CSS/imagenes/img_cinco.jpg" alt="Mochila de textil de Aguayo">
+            <h2>Mochila de textil de Aguayo</h2>
+            <p>Precio: 250 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Mochila de textil de Aguayo', 250)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Monedero de Aguayo', 40, '/static/CSS/imagenes/imgseis.jpg', 'Instrumento musical típico andino, hecho a mano con madera, que produce un sonido encantador. Cada charango es una pieza única, adornada con diseños que cuentan historias.', 4.2, ['/static/CSS/imagenes/imgseis.jpg'])">
+            <img src="/static/CSS/imagenes/imgseis.jpg" alt="Monedero de Aguayo">
+            <h2>Monedero de Aguayo</h2>
+            <p>Precio: 40 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Monedero de Aguayo', 40)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="otros"
+            onclick="showProductDetails('Charango de Madera con Diseño', 350, '/static/CSS/imagenes/img_siete.jpg', 'Joyas únicas elaboradas con técnicas tradicionales, utilizando hilos de colores que simbolizan la conexión de la mujer andina con su entorno y sus raíces.', 4.9, ['/static/CSS/imagenes/img_siete.jpg'])">
+            <img src="/static/CSS/imagenes/img_siete.jpg" alt="Charango de Madera con Diseño">
+            <h2>Charango de Madera con Diseño</h2>
+            <p>Precio: 350 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Charango de Madera con Diseño', 350)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="textil"
+            onclick="showProductDetails('Collares de Textil', 45, '/static/CSS/imagenes/img_ocho.jpg', 'Estas coloridas piezas textiles son perfectas para múltiples usos, desde vestimenta hasta decoración, cada aguayo es una manifestación de la rica diversidad cultural.', 4.3, ['/static/CSS/imagenes/img_ocho.jpg'])">
+            <img src="/static/CSS/imagenes/img_ocho.jpg" alt="Collares de Textil">
+            <h2>Collares de Textil</h2>
+            <p>Precio: 45 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Collares de Textil', 45)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="textil"
+            onclick="showProductDetails('Aguayos de Colores y formas distintas', 320, '/static/CSS/imagenes/img_nueve.jpg', 'Creaciones artísticas que representan diversas figuras de la cultura andina, ideales como elementos decorativos que aportan un toque de autenticidad a cualquier hogar.', 4.6, ['/static/CSS/imagenes/img_nueve.jpg'])">
+            <img src="/static/CSS/imagenes/img_nueve.jpg" alt="Aguayos de Colores y formas distintas">
+            <h2>Aguayos de Colores y formas distintas</h2>
+            <p>Precio: 320 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Aguayos de Colores y formas distintas', 320)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Figuras de Ceramica', 60, '/static/CSS/imagenes/img_diez.jpg', 'Un recipiente tradicional para almacenar líquidos, realizado en cerámica, que refleja la herencia cultural andina y su conexión con la naturaleza.', 4.1, ['/static/CSS/imagenes/img_diez.jpg'])">
+            <img src="/static/CSS/imagenes/img_diez.jpg" alt="Figuras de Ceramica">
+            <h2>Figuras de Ceramica</h2>
+            <p>Precio: 60 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Figuras de Ceramica', 60)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Alcuza andina de Ceramica', 50, '/static/CSS/imagenes/img_once.jpg', 'Cada tejido cuenta una historia, con diseños que representan la identidad de los pueblos andinos, transformando cada pieza en una obra de arte.', 3.9, ['/static/CSS/imagenes/img_once.jpg'])">
+            <img src="/static/CSS/imagenes/img_once.jpg" alt="Alcuza andina de Ceramica">
+            <h2>Alcuza andina de Ceramica</h2>
+            <p>Precio: 50 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Alcuza andina de Ceramica', 50)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="decoracion"
+            onclick="showProductDetails('Tejidos de los Pueblos', 175.20, '/static/CSS/imagenes/img_doce.jpg', 'Artesanías tejidas en telares tradicionales, con lana de alpaca de la más alta calidad, reflejando técnicas que se han transmitido de generación en generación.', 4.4,['/static/CSS/imagenes/img_doce.jpg'])">
+            <img src="/static/CSS/imagenes/img_doce.jpg" alt="Tejidos de los Pueblos">
+            <h2>Tejidos de los Pueblos</h2>
+            <p>Precio: 175.20 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Tejidos de los Pueblos', 175.20)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="textil"
+            onclick="showProductDetails('Telares de Alpaca', 820, '/static/CSS/imagenes/img_trece.jpg', 'Prendas que combinan la funcionalidad con la estética, utilizando aguayos (telas tradicionales) que adornan las vestimentas con colores vivos y patrones autóctonos.', 5, ['/static/CSS/imagenes/img_trece.jpg'])">
+            <img src="/static/CSS/imagenes/img_trece.jpg" alt="Telares de Alpaca">
+            <h2>Telares de Alpaca</h2>
+            <p>Precio: 820 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Telares de Alpaca', 820)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="decoracion"
+            onclick="showProductDetails('Ropa con adornos de Aguayo', 167, '/static/CSS/imagenes/img_catorce.jpg', 'Este conjunto de jarrones de cerámica está elaborado con esmero, presentando diseños que evocan la belleza de la naturaleza andina, perfectos para embellecer cualquier espacio.', 4.7, ['/static/CSS/imagenes/img_catorce.jpg'])">
+            <img src="/static/CSS/imagenes/img_catorce.jpg" alt="Ropa con adornos de Aguayo">
+            <h2>Ropa con adornos de Aguayo</h2>
+            <p>Precio: 167 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Ropa con adornos de Aguayo', 167)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="decoracion"
+            onclick="showProductDetails('Juego de Jarron Ceramica', 90, '/static/CSS/imagenes/img_quince.jpg', 'Una gama de objetos decorativos que utilizan técnicas de artesanía fría, combinando materiales como metal, cerámica y textiles para crear piezas únicas y contemporáneas.', 4.8, ['/static/CSS/imagenes/img_quince.jpg'])">
+            <img src="/static/CSS/imagenes/img_quince.jpg" alt="Juego de Jarron Ceramica">
+            <h2>Juego de Jarron Ceramica</h2>
+            <p>Precio: 90 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Juego de Jarron Ceramica', 90)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Artesania fria', 198, '/static/CSS/imagenes/img_16.jpeg', 'Elaboradas a mano, estas ollas de barro son ideales para la cocina tradicional andina. Cada pieza cuenta con un diseño que refleja la historia y la cultura de sus creadores.', 4.5, ['/static/CSS/imagenes/img_16.jpeg'])">
+            <img src="/static/CSS/imagenes/img_16.jpeg" alt="Artesania fria">
+            <h2>Artesania fria</h2>
+            <p>Precio: 198 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Artesania fria', 198)">Añadir al carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Juego de Ollas de Barro', 370, '/static/CSS/imagenes/img_17.jfif', 'Descripción detallada del producto aquí', 4.6, ['/static/CSS/imagenes/img_17.jfif'])">
+            <img src="/static/CSS/imagenes/img_17.jfif" alt="Juego de Ollas de Barro">
+            <h2>Juego de Ollas de Barro</h2>
+            <p>Precio: 370 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Juego de Ollas de Barro', 370)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="textil"
+            onclick="showProductDetails('Cesteria tejido de Antaño', 50, '/static/CSS/imagenes/img_18.jpg', 'Artesanía que revive técnicas ancestrales de cestería, utilizando fibras naturales para crear piezas únicas y funcionales, perfectas para decorar o para uso diario.', 3.8, ['/static/CSS/imagenes/img_18.jpg'])">
+            <img src="/static/CSS/imagenes/img_18.jpg" alt="Cesteria tejido de Antaño">
+            <h2>Cesteria tejido de Antaño</h2>
+            <p>Precio: 50 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Cesteria tejido de Antaño', 50)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="otros"
+            onclick="showProductDetails('Mantas ATTELIER de Alpaca', 1500, '/static/CSS/imagenes/img_19.jpg', 'Elegantes mantas confeccionadas con suave lana de alpaca, perfectas para brindar calidez y estilo. Cada manta es un trabajo artesanal que destaca los patrones y colores vibrantes característicos de la región.', 5, ['/static/CSS/imagenes/img_19.jpg'])">
+            <img src="/static/CSS/imagenes/img_19.jpg" alt="Mantas ATTELIER de Alpaca">
+            <h2>Mantas ATTELIER de Alpaca</h2>
+            <p>Precio: 1500 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Mantas ATTELIER de Alpaca', 1500)">Añadir al
+                carrito</button>
+        </div>
+
+        <div class="product" data-categoria="artesania"
+            onclick="showProductDetails('Balsa de Totora Con cholitas', 100, '/static/CSS/imagenes/img_20.jpg', ' Una embarcación tradicional hecha de totora, material natural que refleja la conexión de las comunidades con su entorno. Decorada con figuras de cholitas, simboliza la identidad cultural y la fortaleza de las mujeres andinas.', 4.1, ['/static/CSS/imagenes/img_20.jpg'])">
+            <img src="/static/CSS/imagenes/img_20.jpg" alt="Balsa de Totora Con cholitas">
+            <h2>Balsa de Totora Con cholitas</h2>
+            <p>Precio: 100 Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('Balsa de Totora Con cholitas', 100)">Añadir al
+                carrito</button>
+        </div>
+
+        {% for producto in productos %}
+        <div class="product" data-categoria="{{ producto[5] }}"
+            onclick="showProductDetails('{{ producto[1] }}', '{{ producto[2] }}', '{{ producto[4] }}', '{{ producto[3] }}', '4.2', ['{{ producto[4] }}'])">
+            <img src="{{ producto[4] }}" alt="{{ producto[1] }}">
+            <h2>{{ producto[1] }}</h2>
+            <p>Precio: {{ producto[2] }} Bs</p>
+            <button onclick="event.stopPropagation(); addToCart('{{ producto[1] }}', '{{ producto[2] }}')">Añadir al
+                carrito</button>
+
+            {% if usuario_rol == 'Administrador' %}
+            <form action="{{ url_for('eliminar_producto', producto_id=producto[0]) }}" method="POST"
+                style="display:inline;">
+                <button type="submit"
+                    onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="clear"></div>
+
+    <!-- Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Imagen del producto">
+            <h2 id="modalTitle"></h2>
+            <p id="modalPrice"></p>
+            <p id="modalDescription"></p>
+            <p id="modalRating"></p>
+            <div id="modalImagesContainer"></div> <!-- Contenedor para imágenes subidas -->
+            <button id="modalAddToCart" onclick="addToCartFromModal()">Añadir al carrito</button>
+        </div>
+    </div>
+
+    <section id="cart">
+        <h2>Carrito</h2>
+        <ul id="cart-items">
+            <!-- Los items del carrito se añadirán aquí -->
+        </ul>
+        <p>Total: Bs. <span id="cart-total">0</span></p>
+    </section>
+
+    <button class="checkout-button" id="checkout-button" onclick="checkout()">Proceder al Pago</button>
+    <button class="back-button" onclick="goBack()">Volver</button>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let selectedProduct = null;
+
+        function addToCart(name, price) {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            // Verificar si el producto ya está en el carrito
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+
+            // Guardar el carrito actualizado en localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Actualizar el carrito visualmente
+            renderCart();
+        }
+
+        function showProductDetails(name, price, imageUrl, description, rating, uploadedImages) {
+            console.log("Producto seleccionado:", name, price, imageUrl, description, rating, uploadedImages);
+            selectedProduct = { name, price, imageUrl, description, rating, uploadedImages };
+
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalPrice').textContent = `Precio: Bs. ${price}`;
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalRating').textContent = `Calificación: ${rating} estrellas`;
+
+            const modalImagesContainer = document.getElementById('modalImagesContainer');
+            modalImagesContainer.innerHTML = ''; // Limpiar el contenedor antes de añadir nuevas imágenes
+
+            // Añadir imágenes subidas al modal
+            uploadedImages.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Imagen del producto';
+                img.style.width = '100px'; // Ajusta el tamaño de las imágenes como prefieras
+                img.style.margin = '5px'; // Margen entre imágenes
+                modalImagesContainer.appendChild(img);
+            });
+
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'none';
+        }
+
+        function addToCartFromModal() {
+            addToCart(selectedProduct.name, selectedProduct.price);
+            closeModal();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - Bs. ${item.price.toFixed(2)} x ${item.quantity}`;
+
+                // Crear botón de eliminar
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.style.marginLeft = '10px';
+                deleteButton.onclick = () => removeFromCart(index);
+
+                li.appendChild(deleteButton);
+                cartItems.appendChild(li);
+
+                total += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        function removeFromCart(index) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                cart.splice(index, 1); // Elimina el producto si la cantidad es 1
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart(); // Vuelve a renderizar el carrito después de eliminar
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('El carrito está vacío.');
+            } else {
+                // Redirigir a la página de pago
+                window.location.href = '/pago';
+            }
+        }
+
+        // Cargar el carrito al cargar la página
+        window.onload = renderCart;
+
+        function filterByCategory(category) {
+            const products = document.querySelectorAll('.product');
+            products.forEach(product => {
+                if (category === '' || product.dataset.categoria === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

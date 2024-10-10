@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - AndesArtBol</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome CSS para los íconos de "ojito" -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #899B9F;
+            color: white;
+            margin: 0;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .form-group label {
+            color: white;
+        }
+
+        .form-control {
+            background-color: #ffffff;
+        }
+
+        .navbar {
+            background-color: #1E3D34;
+            padding: 10px;
+        }
+
+        .navbar h1 {
+            color: white;
+            margin: 0 15px 0 50px;
+        }
+
+        .navbar a {
+            color: white;
+            margin-right: 15px;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-image {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-image img {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 20px;
+            background-color: #1E3D34;
+            border-radius: 10px;
+        }
+
+        .card {
+            background-color: #1E3D34;
+            border: none;
+            color: white;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #ff4b5c;
+            border: none;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff2a3b;
+        }
+
+        .footer {
+            background-color: #1E3D34;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer a {
+            color: white;
+        }
+
+        .footer-column h5 {
+            margin-bottom: 10px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 67%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navegación -->
+    <nav class="navbar d-flex align-items-center">
+        <h1>AndesArtBol</h1>
+        <a href="{{ url_for('registro') }}">REGISTRO</a>
+        <a href="{{ url_for('login') }}">INICIAR SESIÓN</a>
+        <a href="#">ACERCA DE NOSOTROS</a>
+        <a href="https://canyon-swan-d80.notion.site/PROYECTO-SISTEMA-DE-COMERCIO-ELECTR-NICO-c8ebc799c8bb4e09bf7eea94968dd434">NOTION</a>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control" type="search" placeholder="¿Qué estás buscando?">
+        </form>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="login-container container">
+        <div class="login-image">
+            <img src="/static/CSS/imagenes/Sistema-de-registro-con-fondo.png" alt="Registro">
+        </div>
+
+        <div class="login-form">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Regístrate</h3>
+                </div>
+                <div class="card-body">
+                    {% if error_message %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error_message }}
+                    </div>
+                    {% endif %}
+                    {% if success_message %}
+                    <div class="alert alert-success" role="alert">
+                        {{ success_message }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="/registro" onsubmit="return validarRegistro()">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo</label>
+                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" required>
+                        </div>
+
+                        <!-- Contraseña con el ojito -->
+                        <div class="form-group password-wrapper">
+                            <label for="contraseña">Contraseña</label>
+                            <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="Contraseña" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('contraseña')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+
+                        <!-- Confirmar contraseña con el ojito -->
+                        <div class="form-group password-wrapper">
+                            <label for="confirmar_contraseña">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmar_contraseña" placeholder="Confirmar Contraseña" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('confirmar_contraseña')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rol_id">Rol</label>
+                            <select class="form-control" name="rol_id" required>
+                                <option value="" disabled selected>Seleccione un rol</option>
+                                {% for rol in roles %}
+                                <option value="{{ rol[0] }}">{{ rol[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comunidad_id">Comunidad</label>
+                            <select class="form-control" name="comunidad_id" required>
+                                <option value="" disabled selected>Seleccione una comunidad</option>
+                                {% for comunidad in comunidades %}
+                                <option value="{{ comunidad[0] }}">{{ comunidad[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="footer text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 footer-column">
+                    <h5>AndesArtBol</h5>
+                    <p>Obtén un 10% de descuento en tu primera compra de productos artesanales bolivianos</p>
+                </div>
+                <div class="col-md-3 footer-column">
+                    <h5>Soporte</h5>
+                    <p>Av. Mariscal Santa Cruz, La Paz, Bolivia</p>
+                    <p>Email: soporte@andesartbol.com</p>
+                    <p>Tel: +591-2-244-0000</p>
+                </div>
+                <div class="col-md-3 footer-column">
+                    <h5>Cuenta</h5>
+                    <a href="{{ url_for('login') }}">Login</a><br>
+                    <a href="{{ url_for('registro') }}">Registro</a><br>
+                    <a href="#">Carrito</a><br>
+                </div>
+                <div class="col-md-3 footer-column">
+                    <h5>Enlaces rápidos</h5>
+                    <a href="{{ url_for('politicas') }}">Política de Privacidad</a><br>
+                    <a href="#">Términos de uso</a><br>
+                    <a href="#">Preguntas Frecuentes</a><br>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Función de JavaScript para mostrar/ocultar la contraseña -->
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            var field = document.getElementById(fieldId);
+            var icon = field.nextElementSibling.querySelector('i');
+            if (field.type === "password") {
+                field.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Recuperación</title>
+    <link rel="icon" href="/static/CSS/imagenes/peque.png" type="image/x-icon">
+</head>
+
+<body style="font-family: Arial, sans-serif; background-color: #899B9F; color: #333; margin: 0; padding: 0;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: white; border-radius: 10px;">
+        <h2 style="color: #1E3D34; text-align: center;">Recuperación de Contraseña</h2>
+        <p>Hola,</p>
+        <p>Has solicitado recuperar tu contraseña. Usa el siguiente código para continuar con el proceso:</p>
+        <!-- Verifica que el motor de plantillas esté reemplazando correctamente este código -->
+        <h3 style="text-align: center; background-color: #1E3D34; color: white; padding: 10px; border-radius: 5px;">{{ codigo }}</h3>
+        <p>Si no solicitaste esta acción, ignora este correo.</p>
+        <p style="text-align: center;">
+            <!-- Verifica que la imagen de Google Drive sea accesible públicamente -->
+            <img src="https://drive.google.com/uc?export=view&id=1BbNWXkB98noOjxwobMuMYAVk4QvUYYZz" alt="AndesArtBol" style="width: 150px; height: auto;">
+        </p>
+        <p>Gracias por confiar en <span style="color: #1E3D34; font-weight: bold;">AndesArtBol</span>.</p>
+        <hr style="border: none; border-top: 1px solid #899B9F;">
+        <p style="color: #899B9F; text-align: center; font-size: 12px;">Este correo fue generado automáticamente. Por favor, no respondas a este mensaje.</p>
+    </div>
+</body>
+</html>
